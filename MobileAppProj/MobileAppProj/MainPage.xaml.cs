@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -37,8 +38,8 @@ namespace MobileAppProj
 
 
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
-        {
+       protected override async void OnNavigatedTo(NavigationEventArgs e)
+       {
 
             /*
              // Specify Galway location.
@@ -100,7 +101,12 @@ namespace MobileAppProj
                        break;
                 }
 
-
         }
+
+
+       
+
+
+
     }
 }

@@ -15,8 +15,11 @@
        x:Name="MyMap"            
        ZoomInteractionMode="GestureAndControl"
        TiltInteractionMode="GestureAndControl"   
-       MapServiceToken="sb8p4i7tk66QFrnvK9j0~321hJlGAGFbPqfBcp388hQ~Ai7LdC5d5NNaPpxJ0vamQEpFIwnn-PBoEJFJ0gGJ49f3-QAXgWlt7vB7FTxTcGZm"/>
-
+       MapServiceToken="sb8p4i7tk66QFrnvK9j0~321hJlGAGFbPqfBcp388hQ~Ai7LdC5d5NNaPpxJ0vamQEpFIwnn-PBoEJFJ0gGJ49f3-QAXgWlt7vB7FTxTcGZm">
+           
+        </Maps:MapControl>
+        <TextBox x:Name="textBoxLat" Height="100" TextWrapping="Wrap" Text="TextBoxLat" Width="100"/>
+        <TextBox x:Name="textBoxLong" Height="100" TextWrapping="Wrap" Text="TextBoxLong" Width="100" Margin="250,270,10,270"/>
     </Grid>
 
 </Page>

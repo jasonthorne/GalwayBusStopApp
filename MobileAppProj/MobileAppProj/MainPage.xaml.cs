@@ -9,6 +9,7 @@ using Windows.Foundation.Collections;
 using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Maps;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
@@ -27,6 +28,8 @@ namespace MobileAppProj
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -48,31 +51,54 @@ namespace MobileAppProj
              MyMap.LandmarksVisible = true;
              */
 
+           
+                // Set users current location.
+                var accessStatus = await Geolocator.RequestAccessAsync();
+                switch (accessStatus)
+                {
+                    case GeolocationAccessStatus.Allowed:
 
-          
-            // Set users current location.
-            var accessStatus = await Geolocator.RequestAccessAsync();
-            switch (accessStatus)
-            {
-                case GeolocationAccessStatus.Allowed:
+                    /*
+                    var geolocator = new Geolocator { DesiredAccuracyInMeters = 0 };
 
+                    var position = await geolocator.GetGeopositionAsync();
+
+                    textBoxLat.Text = position.Coordinate.Latitude.ToString();
+                    textBoxLong.Text = position.Coordinate.Longitude.ToString();
+
+                    */
+
+                   
                     // Get users current location.
                     Geolocator geolocator = new Geolocator();
                     Geoposition pos = await geolocator.GetGeopositionAsync();
                     Geopoint myLocation = pos.Coordinate.Point;
 
+
+                    // Create an icon for user
+                    MapIcon userIcon = new MapIcon();
+                    userIcon.Location = myLocation;
+                    userIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
+                    userIcon.Title = "You are here";
+                    userIcon.ZIndex = 0;
+
+                    // Add the icon to the map.
+                    MyMap.MapElements.Add(userIcon);
+
+                   
                     // Set the map's location.
                     MyMap.Center = myLocation;
                     MyMap.ZoomLevel = 14;
                     MyMap.LandmarksVisible = true;
+
                     break;
 
-                case GeolocationAccessStatus.Denied:
+                    case GeolocationAccessStatus.Denied:
 
-                    //Ask user to change location settings if access is denied
-                    bool result = await Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-location"));
-                    break;
-            }
+                        //Ask user to change location settings.
+                       bool result = await Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-location"));
+                       break;
+                }
 
 
         }

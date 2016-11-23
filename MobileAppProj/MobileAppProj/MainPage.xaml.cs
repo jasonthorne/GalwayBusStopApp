@@ -92,16 +92,14 @@ namespace MobileAppProj
 
         }
 
-        private void test1_Click(object sender, RoutedEventArgs e)
+        private async void test1_Click(object sender, RoutedEventArgs e)
         {
+            
+            RootObject[] test = await GetBusStops.GetBusStopData();
+            textBoxTest1.Text = test[0].stop_ref.ToString();
+
             //var data = GetBusStops.GetBusStopData();
-            //textBoxTest1.Text = data.
-
-            //RootObject test = await GetBusStops.GetBusStopData();
-            //textBoxTest1.Text = test.stop_ref.ToString();
-
-            var data = GetBusStops.GetBusStopData();
-           //textBoxTest1.Text = data[0].ToString();
+            //textBoxTest1.Text = data.ToString();
         }
     }
 }

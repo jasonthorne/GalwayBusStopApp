@@ -41,72 +41,67 @@ namespace MobileAppProj
        protected override async void OnNavigatedTo(NavigationEventArgs e)
        {
 
-            /*
-             // Specify Galway location.
-             BasicGeoposition GalwayPosition = new BasicGeoposition() { Latitude = 53.270962, Longitude = -9.062691};
-             Geopoint cityCenter = new Geopoint(GalwayPosition);
+   
+            // Set users current location.
+            var accessStatus = await Geolocator.RequestAccessAsync();
+            switch (accessStatus)
+            {
+                case GeolocationAccessStatus.Allowed:
 
-             // Set the map to Galway location.
-             MyMap.Center = cityCenter;
-             MyMap.ZoomLevel = 14;
-             MyMap.LandmarksVisible = true;
-             */
+                /*
+                var geolocator = new Geolocator { DesiredAccuracyInMeters = 0 };
 
-           
-                // Set users current location.
-                var accessStatus = await Geolocator.RequestAccessAsync();
-                switch (accessStatus)
-                {
-                    case GeolocationAccessStatus.Allowed:
+                var position = await geolocator.GetGeopositionAsync();
 
-                    /*
-                    var geolocator = new Geolocator { DesiredAccuracyInMeters = 0 };
+                textBoxLat.Text = position.Coordinate.Latitude.ToString();
+                textBoxLong.Text = position.Coordinate.Longitude.ToString();
 
-                    var position = await geolocator.GetGeopositionAsync();
-
-                    textBoxLat.Text = position.Coordinate.Latitude.ToString();
-                    textBoxLong.Text = position.Coordinate.Longitude.ToString();
-
-                    */
+                */
 
                    
-                    // Get users current location.
-                    Geolocator geolocator = new Geolocator();
-                    Geoposition pos = await geolocator.GetGeopositionAsync();
-                    Geopoint myLocation = pos.Coordinate.Point;
+                // Get users current location.
+                Geolocator geolocator = new Geolocator();
+                Geoposition pos = await geolocator.GetGeopositionAsync();
+                Geopoint myLocation = pos.Coordinate.Point;
 
+                
+                // Create an icon for user
+                MapIcon userIcon = new MapIcon();
+                userIcon.Location = myLocation;
+                userIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
+                userIcon.Title = "You are here";
+                userIcon.ZIndex = 0;
 
-                    // Create an icon for user
-                    MapIcon userIcon = new MapIcon();
-                    userIcon.Location = myLocation;
-                    userIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
-                    userIcon.Title = "You are here";
-                    userIcon.ZIndex = 0;
-
-                    // Add the icon to the map.
-                    MyMap.MapElements.Add(userIcon);
-
+                // Add the icon to the map.
+                MyMap.MapElements.Add(userIcon);
+               
                    
-                    // Set the map's location.
-                    MyMap.Center = myLocation;
-                    MyMap.ZoomLevel = 14;
-                    MyMap.LandmarksVisible = true;
+                // Set the map's location.
+                MyMap.Center = myLocation;
+                MyMap.ZoomLevel = 14;
+                MyMap.LandmarksVisible = true;
 
+                break;
+
+                case GeolocationAccessStatus.Denied:
+
+                    //Ask user to change location settings.
+                    bool result = await Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-location"));
                     break;
-
-                    case GeolocationAccessStatus.Denied:
-
-                        //Ask user to change location settings.
-                       bool result = await Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-location"));
-                       break;
-                }
+            }
 
         }
 
+        private void test1_Click(object sender, RoutedEventArgs e)
+        {
+            //var data = GetBusStops.GetBusStopData();
+            //textBoxTest1.Text = data.
 
-       
+            //RootObject test = await GetBusStops.GetBusStopData();
+            //textBoxTest1.Text = test.stop_ref.ToString();
 
-
-
+            var data = GetBusStops.GetBusStopData();
+           //textBoxTest1.Text = data[0].ToString();
+        }
     }
 }

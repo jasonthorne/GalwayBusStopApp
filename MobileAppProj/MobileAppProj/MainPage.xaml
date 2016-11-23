@@ -9,17 +9,19 @@
     mc:Ignorable="d">
 
     <Grid x:Name="pageGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        
+
         <!-- MAP CONTROL -->
         <Maps:MapControl
        x:Name="MyMap"            
        ZoomInteractionMode="GestureAndControl"
        TiltInteractionMode="GestureAndControl"   
        MapServiceToken="sb8p4i7tk66QFrnvK9j0~321hJlGAGFbPqfBcp388hQ~Ai7LdC5d5NNaPpxJ0vamQEpFIwnn-PBoEJFJ0gGJ49f3-QAXgWlt7vB7FTxTcGZm">
-           
+
+
+
         </Maps:MapControl>
-        <TextBox x:Name="textBoxLat" Height="100" TextWrapping="Wrap" Text="TextBoxLat" Width="100"/>
-        <TextBox x:Name="textBoxLong" Height="100" TextWrapping="Wrap" Text="TextBoxLong" Width="100" Margin="250,270,10,270"/>
+        <Button x:Name="test1" Content="testAPI1" Height="100" Width="100" Margin="135,136,0,404" Click="test1_Click"/>
+        <TextBox x:Name="textBoxTest1" Height="100" TextWrapping="Wrap" Text="testing API1" Margin="66,312,54,228"/>
     </Grid>
 
 </Page>

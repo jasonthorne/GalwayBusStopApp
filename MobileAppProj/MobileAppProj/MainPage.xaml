@@ -16,12 +16,11 @@
        ZoomInteractionMode="GestureAndControl"
        TiltInteractionMode="GestureAndControl"   
        MapServiceToken="sb8p4i7tk66QFrnvK9j0~321hJlGAGFbPqfBcp388hQ~Ai7LdC5d5NNaPpxJ0vamQEpFIwnn-PBoEJFJ0gGJ49f3-QAXgWlt7vB7FTxTcGZm">
-
-
-
+          
         </Maps:MapControl>
         <Button x:Name="test1" Content="testAPI1" Height="100" Width="100" Margin="135,136,0,404" Click="test1_Click"/>
-        <TextBox x:Name="textBoxTest1" Height="100" TextWrapping="Wrap" Text="testing API1" Margin="66,312,54,228"/>
+        <TextBox x:Name="textBoxTest1" Height="100" TextWrapping="Wrap" Text="testing API1" Margin="47,312,197,228"/>
+        <TextBox x:Name="textBoxTest2" Height="100" TextWrapping="Wrap" Text="testing API2" Width="100" Margin="206,312,54,228"/>
     </Grid>
 
 </Page>

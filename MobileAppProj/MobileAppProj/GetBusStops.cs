@@ -16,15 +16,10 @@ namespace MobileAppProj
         //link-http://galwaybus.herokuapp.com/stops.json
 
         //make call to API to get bus stop data.
-        public static async Task<RootObject[]> GetBusStopData()
+        public static async Task<BusStops[]> API_Call()
         {
 
-            //+++++++var http = new HttpClient(); //set up client
-
-
             string url = String.Format("http://galwaybus.herokuapp.com/stops.json"); //make url
-
-            //+++++++var response = await http.GetAsync("http://galwaybus.herokuapp.com/stops.json"); //get response
 
             HttpClient http = new HttpClient(); //set up client
 
@@ -32,10 +27,10 @@ namespace MobileAppProj
 
             var jsonMsg = await response.Content.ReadAsStringAsync(); //read in string
 
-            var serializer = new DataContractJsonSerializer(typeof(RootObject[])); //deserialize json into c# class
+            var serializer = new DataContractJsonSerializer(typeof(BusStops[])); //deserialize json into c# class
 
             var memStream = new MemoryStream(Encoding.UTF8.GetBytes(jsonMsg)); //memory stream of json bytes for deserializer
-            var result = (RootObject[])serializer.ReadObject(memStream);
+            var result = (BusStops[])serializer.ReadObject(memStream);
 
             return result; //return result object
             
@@ -47,25 +42,22 @@ namespace MobileAppProj
 
     //C# class from Json 
     [DataContract]
-    public class RootObject
+    public class BusStops
     {
-        [DataMember]
+
+       [DataMember]
         public string long_name { get; set; }
-
-        [DataMember]
+       [DataMember]
         public int stop_id { get; set; }
-
-        [DataMember]
+       [DataMember]
         public string stop_ref { get; set; }
-
-        [DataMember]
+       [DataMember]
         public string irish_long_name { get; set; }
-
-        [DataMember]
+       [DataMember]
         public double latitude { get; set; }
+       [DataMember]
+        public double longitude { get; set; }
 
-        [DataMember]
-        public double longitude { get; set; } 
     }
 
 

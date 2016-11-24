@@ -38,64 +38,88 @@ namespace MobileAppProj
 
 
 
-       protected override async void OnNavigatedTo(NavigationEventArgs e)
-       {
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
 
-   
+            makeMap();
+            populateMap();
+
+
+        }
+
+
+        private async void makeMap()
+        {
+
+
             // Set users current location.
             var accessStatus = await Geolocator.RequestAccessAsync();
             switch (accessStatus)
             {
                 case GeolocationAccessStatus.Allowed:
 
-                /*
-                var geolocator = new Geolocator { DesiredAccuracyInMeters = 0 };
 
-                var position = await geolocator.GetGeopositionAsync();
+                    // Get users current location.
+                    Geolocator geolocator = new Geolocator();
+                    Geoposition pos = await geolocator.GetGeopositionAsync();
+                    Geopoint myLocation = pos.Coordinate.Point;
 
-                textBoxLat.Text = position.Coordinate.Latitude.ToString();
-                textBoxLong.Text = position.Coordinate.Longitude.ToString();
+                    
+                    // Create an icon for user
+                    MapIcon userIcon = new MapIcon();
+                    userIcon.Location = myLocation;
+                    userIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
+                    userIcon.Title = "You are here";
+                    userIcon.ZIndex = 0;
 
-                */
-
+                    // Add the icon to the map.
+                    MyMap.MapElements.Add(userIcon);
                    
-                // Get users current location.
-                Geolocator geolocator = new Geolocator();
-                Geoposition pos = await geolocator.GetGeopositionAsync();
-                Geopoint myLocation = pos.Coordinate.Point;
 
-                
-                // Create an icon for user
-                MapIcon userIcon = new MapIcon();
-                userIcon.Location = myLocation;
-                userIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
-                userIcon.Title = "You are here";
-                userIcon.ZIndex = 0;
+                    // Set the map's location.
+                    MyMap.Center = myLocation;
+                    MyMap.ZoomLevel = 14;
+                    MyMap.LandmarksVisible = true;
 
-                // Add the icon to the map.
-                MyMap.MapElements.Add(userIcon);
-               
-                   
-                // Set the map's location.
-                MyMap.Center = myLocation;
-                MyMap.ZoomLevel = 14;
-                MyMap.LandmarksVisible = true;
+                    break;
 
-                break;
-
-                case GeolocationAccessStatus.Denied:
+                case GeolocationAccessStatus.Denied: //++++++++++++++++++++++++++++++THIS NEEDS HANDLED!! 
 
                     //Ask user to change location settings.
                     bool result = await Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-location"));
                     break;
             }
+        }
+
+
+       
+        private async void populateMap()
+        {
+            BusStops[] busStopData = await GetBusStops.API_Call();
+
+            //===================================================================TESTING
+            string num = busStopData[0].stop_ref; 
+
+            textBoxTest1.Text = num; 
+
+            DepartureTimes[] test = await GetDepartureTimes.API_Call(num);
+
+
+            textBoxTest2.Text = test[0].times[0].depart_timestamp;
+
+            //textBoxTest2.Text = test[0].stop.stop_ref;
+
+            //===================================================================TESTING
 
         }
+
+       
+
 
         private async void test1_Click(object sender, RoutedEventArgs e)
         {
             
-            RootObject[] test = await GetBusStops.GetBusStopData();
+            BusStops[] test = await GetBusStops.API_Call();
             textBoxTest1.Text = test[0].stop_ref.ToString();
 
             //var data = GetBusStops.GetBusStopData();

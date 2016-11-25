@@ -14,10 +14,10 @@ namespace MobileAppProj
     {
         
         //make call to API to get departure times
-        public static async Task<DepartureTimes[]> API_Call(string stop_ref)
+        public static async Task<DepartureTimes> API_Call(string stop_ref)
         {
 
-            string url = String.Format("http://galwaybus.herokuapp.com/{0}.json", stop_ref); //make url
+            string url = String.Format("http://galwaybus.herokuapp.com/stops/{0}.json", stop_ref); //make url
 
             HttpClient http = new HttpClient(); //set up client
 
@@ -25,10 +25,10 @@ namespace MobileAppProj
 
             var jsonMsg = await response.Content.ReadAsStringAsync(); //read in string
 
-            var serializer = new DataContractJsonSerializer(typeof(DepartureTimes[])); //deserialize json into c# class
+            var serializer = new DataContractJsonSerializer(typeof(DepartureTimes)); //deserialize json into c# class
 
             var memStream = new MemoryStream(Encoding.UTF8.GetBytes(jsonMsg)); //memory stream of json bytes for deserializer
-            var result = (DepartureTimes[])serializer.ReadObject(memStream);
+            var result = (DepartureTimes)serializer.ReadObject(memStream);
 
             return result; //return result object
 

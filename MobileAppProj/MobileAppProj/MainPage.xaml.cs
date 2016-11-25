@@ -100,7 +100,9 @@ namespace MobileAppProj
             //find bus stops
             BusStops[] busStopData = await GetBusStops.API_Call();
 
-            DepartureTimes[] departureTimeData;
+
+
+            DepartureTimes departureTimeData;
             ArrayList tempArray = new ArrayList();
             string stop_ref = "";
 
@@ -117,7 +119,9 @@ namespace MobileAppProj
             for (int j=0; j<tempArray.Count; j++)
             { 
                 departureTimeData = await GetDepartureTimes.API_Call(tempArray[j].ToString());
-                //textBoxTest2.Text += " " + departureTimeData[j].times[j].timetable_id.ToString(); //test
+                //textBoxTest2.Text += " " + departureTimeData.stop.stop_ref;
+                /////////////////////textBoxTest2.Text += " " + departureTimeData.times[j].depart_timestamp;++index out of bounds
+                //textBoxTest2.Text += " " + departureTimeData.Length;
             }
 
 
@@ -137,7 +141,7 @@ namespace MobileAppProj
 
 
 
-      
+
         }
 
        

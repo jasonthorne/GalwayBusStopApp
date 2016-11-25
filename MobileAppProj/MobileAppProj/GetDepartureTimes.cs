@@ -13,7 +13,7 @@ namespace MobileAppProj
     class GetDepartureTimes
     {
         
-        //make call to API to get bus stop data.
+        //make call to API to get departure times
         public static async Task<DepartureTimes[]> API_Call(string stop_ref)
         {
 

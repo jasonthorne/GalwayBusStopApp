@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -95,22 +96,48 @@ namespace MobileAppProj
        
         private async void populateMap()
         {
+
+            //find bus stops
             BusStops[] busStopData = await GetBusStops.API_Call();
 
-            //===================================================================TESTING
-            string num = busStopData[0].stop_ref; 
-
-            textBoxTest1.Text = num; 
-
-            DepartureTimes[] test = await GetDepartureTimes.API_Call(num);
+            DepartureTimes[] departureTimeData;
+            ArrayList tempArray = new ArrayList();
+            string stop_ref = "";
 
 
-            textBoxTest2.Text = test[0].times[0].depart_timestamp;
+            //collect stop_refs 
+            for (int i=0; i<busStopData.Length; i++)
+            {
+                stop_ref = busStopData[i].stop_ref;
+                tempArray.Add(stop_ref);
+                textBoxTest1.Text += " " + tempArray[i]; //test
+            }
+
+            //find departure time data using stop_refs 
+            for (int j=0; j<tempArray.Count; j++)
+            { 
+                departureTimeData = await GetDepartureTimes.API_Call(tempArray[j].ToString());
+                //textBoxTest2.Text += " " + departureTimeData[j].times[j].timetable_id.ToString(); //test
+            }
+
+
+
+
+            //  string num = busStopData[0].stop_ref; 
+
+            // textBoxTest1.Text = num; 
+
+            //DepartureTimes[] test = await GetDepartureTimes.API_Call(num);
+
+
+            // textBoxTest2.Text = test[0].times[0].depart_timestamp;
 
             //textBoxTest2.Text = test[0].stop.stop_ref;
 
-            //===================================================================TESTING
 
+
+
+      
         }
 
        

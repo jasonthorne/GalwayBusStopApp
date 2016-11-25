@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -30,7 +31,19 @@ namespace MobileAppProj
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        
+
+        private BusStops[] busStopData;
+        private DepartureTimes departureTimeData;
+        //private List<MapIcon> mapIcons = new List<MapIcon>();
+        private List<MapIconObj> mapIconList = new List<MapIconObj>();
+        //////private List<BusStop> busStopList = new List<BusStop>();
+        ///MapIconObj mapIconArray = new MapIconObj[];
+
+        //private int longitude = 0;
+        //private int latitude = 0;
+
+        ArrayList tempArray = new ArrayList(); //DELETE++++++++++++++++++
+
 
         public MainPage()
         {
@@ -38,13 +51,30 @@ namespace MobileAppProj
         }
 
 
+        public class MapIconObj
+        {
+            public MapIcon mapIcon { get; set; }
+            public int stop_id { get; set; }
+        }
+ 
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
 
             makeMap();
-            populateMap();
+            await populateMap();
 
+            
+            string stop_ref = "";
+
+            //collect stop_refs 
+            for (int i = 0; i < busStopData.Length; i++)
+            {
+                stop_ref = busStopData[i].stop_ref;
+                tempArray.Add(stop_ref);
+                textBoxTest1.Text += " " + tempArray[i]; //test
+            }
 
         }
 
@@ -65,7 +95,6 @@ namespace MobileAppProj
                     Geoposition pos = await geolocator.GetGeopositionAsync();
                     Geopoint myLocation = pos.Coordinate.Point;
 
-                    
                     // Create an icon for user
                     MapIcon userIcon = new MapIcon();
                     userIcon.Location = myLocation;
@@ -76,7 +105,6 @@ namespace MobileAppProj
                     // Add the icon to the map.
                     MyMap.MapElements.Add(userIcon);
                    
-
                     // Set the map's location.
                     MyMap.Center = myLocation;
                     MyMap.ZoomLevel = 14;
@@ -92,39 +120,59 @@ namespace MobileAppProj
             }
         }
 
+        
 
-       
-        private async void populateMap()
+        //private async void populateMap()
+        private async Task<BusStops[]> populateMap()
         {
 
             //find bus stops
-            BusStops[] busStopData = await GetBusStops.API_Call();
+            busStopData = await GetBusStops.API_Call();
 
-
-
-            DepartureTimes departureTimeData;
-            ArrayList tempArray = new ArrayList();
-            string stop_ref = "";
-
-
-            //collect stop_refs 
-            for (int i=0; i<busStopData.Length; i++)
+            //loop through busStopData
+            for (int i = 0; i < busStopData.Length; i++)
             {
-                stop_ref = busStopData[i].stop_ref;
-                tempArray.Add(stop_ref);
-                textBoxTest1.Text += " " + tempArray[i]; //test
+
+                //create temp objects 
+                MapIconObj tempMapIconObj = new MapIconObj();
+                MapIcon tempMapIcon = new MapIcon();
+               
+                //add values to obj
+                tempMapIconObj.mapIcon = tempMapIcon;
+                tempMapIconObj.stop_id = busStopData[i].stop_id;
+
+                //add obj to list
+                mapIconList.Add(tempMapIconObj);
+
+                //find location for icon
+                BasicGeoposition snPosition = new BasicGeoposition()
+                {
+                    Latitude = busStopData[i].latitude,
+                    Longitude = busStopData[i].longitude
+                };
+
+                //define icon
+                Geopoint snPoint = new Geopoint(snPosition);
+                tempMapIcon.Location = snPoint;
+                tempMapIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
+                tempMapIcon.ZIndex = 0;
+
+                //add icon to map
+                MyMap.MapElements.Add(tempMapIcon);
+
             }
 
+
+           
+            /*
             //find departure time data using stop_refs 
             for (int j=0; j<tempArray.Count; j++)
             { 
                 departureTimeData = await GetDepartureTimes.API_Call(tempArray[j].ToString());
-                //textBoxTest2.Text += " " + departureTimeData.stop.stop_ref;
-                /////////////////////textBoxTest2.Text += " " + departureTimeData.times[j].depart_timestamp;++index out of bounds
-                //textBoxTest2.Text += " " + departureTimeData.Length;
+               textBoxTest2.Text += " " + departureTimeData.stop.stop_ref;
+               // textBoxTest2.Text += " " + departureTimeData.times[j].depart_timestamp; //++index out of bounds
             }
-
-
+          */
 
 
             //  string num = busStopData[0].stop_ref; 
@@ -139,22 +187,23 @@ namespace MobileAppProj
             //textBoxTest2.Text = test[0].stop.stop_ref;
 
 
-
+            return busStopData;
 
 
         }
 
-       
 
 
-        private async void test1_Click(object sender, RoutedEventArgs e)
+
+        private void test1_Click(object sender, RoutedEventArgs e)
         {
-            
-            BusStops[] test = await GetBusStops.API_Call();
-            textBoxTest1.Text = test[0].stop_ref.ToString();
+
+            //BusStops[] test = await GetBusStops.API_Call();
+            // textBoxTest1.Text = test[0].stop_ref.ToString();
 
             //var data = GetBusStops.GetBusStopData();
             //textBoxTest1.Text = data.ToString();
         }
+
     }
 }

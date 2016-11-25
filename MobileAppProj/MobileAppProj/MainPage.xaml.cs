@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage.Streams;
 using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -101,6 +102,8 @@ namespace MobileAppProj
                     userIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
                     userIcon.Title = "You are here";
                     userIcon.ZIndex = 0;
+                    userIcon.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/userIcon.png"));
+
 
                     // Add the icon to the map.
                     MyMap.MapElements.Add(userIcon);
@@ -136,7 +139,8 @@ namespace MobileAppProj
                 //create temp objects 
                 MapIconObj tempMapIconObj = new MapIconObj();
                 MapIcon tempMapIcon = new MapIcon();
-               
+                /////////???tempMapIcon.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/mapIcon.png"));
+
                 //add values to obj
                 tempMapIconObj.mapIcon = tempMapIcon;
                 tempMapIconObj.stop_id = busStopData[i].stop_id;

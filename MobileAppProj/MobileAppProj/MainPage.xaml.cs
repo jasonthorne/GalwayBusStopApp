@@ -11,6 +11,8 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage.Streams;
 using Windows.System;
+using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Maps;
@@ -134,7 +136,7 @@ namespace MobileAppProj
             {
 
 
-                //create temp objects 
+                //create map icon
                 MapIcon tempMapIcon = new MapIcon();
                 //var tempButton = new Button();
                 //tempButton.Content = "TEST"; //////////////////////////REMOVE LATER!! (& make button invisible)
@@ -174,7 +176,7 @@ namespace MobileAppProj
                 tempMapIcon.ZIndex = 0;
                 //tempMapIcon.Title = busStopData[i].stop_id.ToString();
                 tempMapIcon.Title = busStopData[i].long_name;
-
+               
                 /*
                 MapIconObj tempMapIconObj = new MapIconObj();
                 tempMapIconObj.mapIcon = tempMapIcon;
@@ -222,9 +224,17 @@ namespace MobileAppProj
             MapIcon clickedIcon = args.MapElements.FirstOrDefault(x => x is MapIcon) as MapIcon;
             //Debug.WriteLine("Icon clicked with ID: " + clickedIcon.Title); //test 
             Debug.WriteLine("Icon clicked with Long Name: " + clickedIcon.Title); //test 
+            showBusTimes(clickedIcon.Title); ///test
+            
+
         }
 
-
+        
+        private async void showBusTimes(string busTimes)
+        {
+            MessageDialog dialog = new MessageDialog(busTimes);
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await dialog.ShowAsync());
+        }
 
     }
 }

@@ -6,7 +6,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
     x:Class="MobileAppProj.MainPage"
-   
     mc:Ignorable="d">
 
     <Grid x:Name="pageGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -18,7 +17,9 @@
        TiltInteractionMode="GestureAndControl"   
        MapServiceToken="sb8p4i7tk66QFrnvK9j0~321hJlGAGFbPqfBcp388hQ~Ai7LdC5d5NNaPpxJ0vamQEpFIwnn-PBoEJFJ0gGJ49f3-QAXgWlt7vB7FTxTcGZm"
        MapElementClick="mapIcon_Click">
-   
+        
+            
+            
         </Maps:MapControl>
         
 

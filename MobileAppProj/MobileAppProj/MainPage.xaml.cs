@@ -36,7 +36,7 @@ namespace MobileAppProj
     {
 
         private BusStops[] busStopData;
-        private DepartureTimes departureTimeData;
+       // private DepartureTimes departureTimeData;
         //private List<MapIconObj> mapIconList = new List<MapIconObj>();
 
 
@@ -176,7 +176,7 @@ namespace MobileAppProj
                 tempMapIcon.ZIndex = 0;
                 //tempMapIcon.Title = busStopData[i].stop_id.ToString();
                 tempMapIcon.Title = busStopData[i].long_name;
-               
+                //tempMapIcon.Title = busStopData[i].stop_ref;
                 /*
                 MapIconObj tempMapIconObj = new MapIconObj();
                 tempMapIconObj.mapIcon = tempMapIcon;
@@ -220,19 +220,68 @@ namespace MobileAppProj
 
         private void mapIcon_Click(MapControl sender, MapElementClickEventArgs args)
         {
+
             //find which icon element has been clicked 
             MapIcon clickedIcon = args.MapElements.FirstOrDefault(x => x is MapIcon) as MapIcon;
             //Debug.WriteLine("Icon clicked with ID: " + clickedIcon.Title); //test 
             Debug.WriteLine("Icon clicked with Long Name: " + clickedIcon.Title); //test 
-            showBusTimes(clickedIcon.Title); ///test
-            
+
+            if (clickedIcon.Title == "You are here")
+            {
+                showMessage(clickedIcon.Title);
+            }
+            else
+            {
+
+                string stop_ref = "";
+
+                //loop through busStopData
+                for (int i = 0; i < busStopData.Length; i++)
+                {
+                    //find stop_ref
+                    if (clickedIcon.Title == busStopData[i].long_name)
+                    {
+                        stop_ref = busStopData[i].stop_ref;
+                        break;
+                    }
+                }
+
+
+                //makeDepartureTimes(clickedIcon.Title, stop_ref);
+                //makeDepartureTimes(clickedIcon.Title);
+
+                //showDepartureTimes(clickedIcon.Title); ///test
+                makeDepartureTimes(stop_ref);
+
+            }
+
+
 
         }
 
-        
-        private async void showBusTimes(string busTimes)
+        //private async void makeDepartureTimes(string stopName, string stop_ref)
+        private async void makeDepartureTimes(string stop_ref)
         {
-            MessageDialog dialog = new MessageDialog(busTimes);
+
+            DepartureTimes departureTimeData = await GetDepartureTimes.API_Call(stop_ref);
+
+           string message = string.Format("Route" + " " + "Destination" + " " + "Time" + "\n\n");
+           
+
+            //loop through list of departure times
+            for (int i = 0; i < departureTimeData.times.Count; i++)
+            {
+
+                message += departureTimeData.times[i].depart_timestamp + "\n\n";
+            }
+
+            showMessage(message);
+
+        }
+
+        private async void showMessage(string message)
+        {
+            MessageDialog dialog = new MessageDialog(message);
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await dialog.ShowAsync());
         }
 

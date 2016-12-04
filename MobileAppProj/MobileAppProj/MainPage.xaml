@@ -9,6 +9,12 @@
     mc:Ignorable="d">
 
     <Grid x:Name="pageGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+
 
         <!-- MAP CONTROL -->
         <Maps:MapControl
@@ -16,19 +22,44 @@
        ZoomInteractionMode="GestureAndControl"
        TiltInteractionMode="GestureAndControl"   
        MapServiceToken="sb8p4i7tk66QFrnvK9j0~321hJlGAGFbPqfBcp388hQ~Ai7LdC5d5NNaPpxJ0vamQEpFIwnn-PBoEJFJ0gGJ49f3-QAXgWlt7vB7FTxTcGZm"
-       MapElementClick="mapIcon_Click">
+       MapElementClick="mapIcon_Click" Grid.RowSpan="2"/>
+
+        <RelativePanel>
+            <!--="&#xE700;" -->
+            <Button Name="ShowRoutesButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;" FontSize="36" Click="ShowRoutesButton_Click"/>
+        </RelativePanel>
         
-            
-            
-        </Maps:MapControl>
-        
+        <SplitView Grid.Row="1" Name="MySpiltView" DisplayMode="CompactOverlay" OpenPaneLength="200" CompactPaneLength="0" HorizontalAlignment="Left" Width="200">
+            <SplitView.Pane>
+                <ListBox Name="RoutesListBox" SelectionMode="Single" SelectionChanged="RoutesListBox_SelectionChanged">
+                    <ListBoxItem>
+                        <!-- <StackPanel Orientation="Horizontal"> -->
+                            <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="20" Text="&#xEB47;"/>
+                        <!-- <TextBlock Text="test" FontSize="20" /> -->
+                        <!--</StackPanel> -->
+                    </ListBoxItem>
 
 
-            <Button x:Name="test1" Content="testAPI1" Height="100" Width="100" Margin="135,136,0,404" Click="test1_Click" Visibility="Collapsed"/>
+                    <ListBoxItem>
+                        <!-- <StackPanel Orientation="Horizontal"> -->
+                            <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="20" Text="&#xEB47;"/>
+                        <!--  <TextBlock Text="test2" FontSize="20" />  -->
+                        <!-- </StackPanel>  -->
+                    </ListBoxItem>
+
+                </ListBox>
+            </SplitView.Pane>
+
+            
+        </SplitView>
+
+        <!--
+        <Button x:Name="test1" Content="testAPI1" Height="100" Width="100" Margin="135,136,0,404" Click="test1_Click" Visibility="Visible"/>
         <TextBox x:Name="textBoxTest1" Height="100" TextWrapping="Wrap" Text="testing API1" Margin="47,312,197,228"/>
         <TextBox x:Name="textBoxTest2" Height="100" TextWrapping="Wrap" Text="testing API2" Width="100" Margin="47,458,213,82" Visibility="Collapsed"/>
+        
 
-        <ProgressRing Height="80" Width="80"/>
+        <ProgressRing Height="80" Width="80"/>-->
     </Grid>
 
 </Page>

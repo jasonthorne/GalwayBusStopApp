@@ -25,8 +25,6 @@ using Windows.UI.Xaml.Navigation;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 
-
-
 namespace MobileAppProj
 {
     /// <summary>
@@ -41,6 +39,10 @@ namespace MobileAppProj
         public MainPage()
         {
             this.InitializeComponent();
+            
+  
+            RoutesListBox.Items.Add("test"); ////////////////Delete!!
+
         }
 
 
@@ -149,6 +151,7 @@ namespace MobileAppProj
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++DELETE!!
         private void test1_Click(object sender, RoutedEventArgs e)
         {
+            RoutesListBox.Items.Add("fff");
 
             //BusStops[] test = await GetBusStops.API_Call();
             // textBoxTest1.Text = test[0].stop_ref.ToString();
@@ -165,40 +168,16 @@ namespace MobileAppProj
 
             //find which icon element has been clicked 
             MapIcon clickedIcon = args.MapElements.FirstOrDefault(x => x is MapIcon) as MapIcon;
-            //Debug.WriteLine("Icon clicked with ID: " + clickedIcon.Title); //test 
-            Debug.WriteLine("Icon clicked with Long Name: " + clickedIcon.Title); //test 
+            Debug.WriteLine("Icon clicked with Long Name: " + clickedIcon.Title); //test ================================REMOVE!! 
 
             string long_name = clickedIcon.Title;
-
-            /*
-            switch (long_name)
-            {
-                case "You are here":
-                    showMessage(long_name);
-                    break;
-                default:
-                    string stop_ref = "";
-
-                    //loop through busStopData
-                    for (int i = 0; i < busStopData.Length; i++)
-                    {
-                        //find stop_ref
-                        if (long_name == busStopData[i].long_name)
-                        {
-                            stop_ref = busStopData[i].stop_ref;
-                            break;
-                        }
-                    }
-
-                    makeDepartureTimes(stop_ref);
-                    break;
-            }*/
            
 
-            
+
             if (!long_name.Contains("You are here"))
             {
-                string stop_ref = "";
+
+               //string stop_ref = "";
 
                 //loop through busStopData
                 for (int i = 0; i < busStopData.Length; i++)
@@ -206,48 +185,102 @@ namespace MobileAppProj
                     //find stop_ref
                     if (long_name == busStopData[i].long_name)
                     {
-                        stop_ref = busStopData[i].stop_ref;
+                        //stop_ref = busStopData[i].stop_ref;
+                        makeDepartureTimes(busStopData[i].stop_ref);
                         break;
-                    }
+                    }  
                 }
 
-                makeDepartureTimes(stop_ref);
-            }
-            else
-            {
-                showMessage(long_name);
-            }
+           } 
+           else
+           {
+                showMessage(clickedIcon.Title);       
+           }
 
         }
 
-        //private async void makeDepartureTimes(string stopName, string stop_ref)
+
         private async void makeDepartureTimes(string stop_ref)
         {
 
             //ProgressRing progRing = new ProgressRing();
 
-           // progRing.IsActive = true; //++++++++++++++++++++++++++++++++++++++++++++++++++++++NOT WORKING?? 
+           //progRing.IsActive = true; //++++++++++++++++++++++++++++++++++++++++++++++++++++++NOT WORKING?? 
             DepartureTimes departureTimeData = await GetDepartureTimes.API_Call(stop_ref);
-           // progRing.IsActive = false;
+           //progRing.IsActive = false;
 
-            string message = string.Format("Route" + " | " + "Destination" +  " | " + "Time" + "\n\n");
-            ///string depart_timestamp = "";
+            string message = string.Format("Route" + " | " + "Destination" +  " | " + "Time due" + "\n\n");
             DateTime nextBus;
             DateTime currentTime;
             TimeSpan timeUntillNextBus;
-            
+
+            string hourValue = "";
+            string minuteValue = "";
+            bool showMinutes = true;
+            bool showHours = true;
+         
 
             //loop through list of departure times
             for (int i = 0; i < departureTimeData.times.Count; i++)
             {
                 //find due time
-                //depart_timestamp = departureTimeData.times[i].depart_timestamp;
                 nextBus = DateTime.Parse(departureTimeData.times[i].depart_timestamp);
                 currentTime = DateTime.UtcNow;
                 timeUntillNextBus = nextBus.Subtract(currentTime);
 
-                 //append string
-                 message += string.Format("{0}" + " | " + "{1}" + " | " + "{2} hours" + " {3} minutes" + "\n\n", departureTimeData.times[i].timetable_id, departureTimeData.times[i].display_name, timeUntillNextBus.Hours, timeUntillNextBus.Minutes);
+                showMinutes = true;
+                showHours = true;
+
+                if (timeUntillNextBus.Minutes > 1)
+                {
+                       minuteValue = "minutes";
+                }
+                else if (timeUntillNextBus.Minutes == 1)
+                {
+                       minuteValue = "minute";
+                }
+                else if (timeUntillNextBus.Minutes == 0 || timeUntillNextBus.Minutes < 0)
+                {
+                    //dont print minutes
+                    showMinutes = false;
+                }
+
+
+                if (timeUntillNextBus.Hours > 1)
+                {
+                    hourValue = "hours";
+                    
+                }
+                else if (timeUntillNextBus.Hours == 1)
+                {
+                    hourValue = "hour";
+
+                }
+                else if (timeUntillNextBus.Hours == 0 || timeUntillNextBus.Hours < 0)
+                {
+                    //dont print hours 
+                    showHours = false;
+                }
+
+               
+
+                if (showHours && showMinutes)
+                {
+                    message += string.Format(departureTimeData.times[i].timetable_id + " | " + departureTimeData.times[i].display_name + " | " + timeUntillNextBus.Hours + " " + hourValue + " & " + timeUntillNextBus.Minutes + " " + minuteValue + " from now \n\n");
+                }
+                else if (showHours && !showMinutes)
+                {
+                    message += string.Format(departureTimeData.times[i].timetable_id + " | " + departureTimeData.times[i].display_name + " | " + timeUntillNextBus.Hours + " " + hourValue + " from now \n\n");
+                }
+                else if (!showHours && showMinutes)
+                {
+                    message += string.Format(departureTimeData.times[i].timetable_id + " | " + departureTimeData.times[i].display_name + " | " + timeUntillNextBus.Minutes + " " + minuteValue + " from now \n\n");
+                }
+                else if (!showHours && !showMinutes)
+                {
+                    message += string.Format(departureTimeData.times[i].timetable_id + " | " + departureTimeData.times[i].display_name + " | " + "Due now\n\n");
+                }
+
             }
 
             showMessage(message);
@@ -256,13 +289,34 @@ namespace MobileAppProj
 
 
 
-
         private async void showMessage(string message)
         {
             MessageDialog dialog = new MessageDialog(message);
+
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await dialog.ShowAsync());
         }
 
+
+        //open pane
+        private void ShowRoutesButton_Click(object sender, RoutedEventArgs e)
+        {
+            MySpiltView.IsPaneOpen = !MySpiltView.IsPaneOpen;
+        }
+
+        //list box event listener
+        private void RoutesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            //spin through routes object, then check if title is equal to one pressed. 
+            //plot route 
+            //make cancel route button
+            //brak out of loop
+
+
+            if ((string)RoutesListBox.SelectedItem == "test")
+                Debug.WriteLine((string)RoutesListBox.SelectedItem);
+        }
+        
     }
 
 }

@@ -53,6 +53,10 @@
             
         </SplitView>
 
+        <!-- <ProgressRing Height="80" Width="80" /> -->
+
+        <ProgressRing Name="progressRing" IsActive="False" Height="80" Width="80" Grid.RowSpan="2" />
+
         <!--
         <Button x:Name="test1" Content="testAPI1" Height="100" Width="100" Margin="135,136,0,404" Click="test1_Click" Visibility="Visible"/>
         <TextBox x:Name="textBoxTest1" Height="100" TextWrapping="Wrap" Text="testing API1" Margin="47,312,197,228"/>

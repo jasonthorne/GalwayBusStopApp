@@ -34,9 +34,8 @@ namespace MobileAppProj
     {
 
         private BusStops[] busStopData;
-        private Routes routeData;
-      
-
+        //private Routes routeData;
+       
         public MainPage()
         {
             this.InitializeComponent();
@@ -51,8 +50,12 @@ namespace MobileAppProj
         {
 
             makeMap();
+
+            progressRing.IsActive = true;
             await populateMap();
-            //makeRoutes();
+            progressRing.IsActive = false;
+
+            makeRoutes();
 
         }
 
@@ -96,8 +99,7 @@ namespace MobileAppProj
 
                 //Ask user to change location settings.
                 bool result = await Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-location"));
-                this.InitializeComponent();
-                    break;
+                break;
             }
         }
 
@@ -107,9 +109,10 @@ namespace MobileAppProj
         private async Task<BusStops[]> populateMap()
         {
 
+
             //find bus stops
             busStopData = await GetBusStops.API_Call();
-
+           
             //loop through busStopData
             for (int i = 0; i < busStopData.Length; i++)
             {
@@ -205,13 +208,16 @@ namespace MobileAppProj
 
         private async void makeDepartureTimes(string stop_ref)
         {
-           
-            DepartureTimes departureTimeData = await GetDepartureTimes.API_Call(stop_ref);
+            
+            progressRing.IsActive = true; 
+            DepartureTimes departureTimeData = await GetDepartureTimes.API_Call(stop_ref); 
+            progressRing.IsActive = false; 
+
             DateTime nextBus;
             DateTime currentTime;
             TimeSpan timeUntillNextBus;
 
-            string message = string.Format("Route" + " | " + "Destination" + " | " + "Time due" + "\n\n");
+            string message = string.Format("Route" + " | " + "Destination" + " | " + "Time" + "\n\n");
             string hourValue = "";
             string minuteValue = "";
             bool showMinutes; 
@@ -234,11 +240,11 @@ namespace MobileAppProj
                 //set minutes
                 if (timeUntillNextBus.Minutes > 1)
                 {
-                       minuteValue = "minutes";
+                      minuteValue = "minutes";
                 }
                 else if (timeUntillNextBus.Minutes == 1)
                 {
-                       minuteValue = "minute";
+                     minuteValue = "minute";
                 }
                 else if (timeUntillNextBus.Minutes == 0 || timeUntillNextBus.Minutes < 0)
                 {
@@ -317,13 +323,18 @@ namespace MobileAppProj
                 Debug.WriteLine((string)RoutesListBox.SelectedItem);
         }
 
-    /*
+    
         private async void makeRoutes()
         {
 
-            await null;
+            //await progressRing.IsActive = true;
+            //
+            Routes RouteData = await GetRoutes.API_Call();
+            //progressRing.IsActive = false;
+
+
         }
-        */
+       
 
     }
 

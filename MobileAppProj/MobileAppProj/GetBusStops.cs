@@ -46,17 +46,17 @@ namespace MobileAppProj
     {
 
        [DataMember]
-        public string long_name { get; set; }
+       public string long_name { get; set; }
        [DataMember]
-        public int stop_id { get; set; }
+       public int stop_id { get; set; }
        [DataMember]
-        public string stop_ref { get; set; }
+       public string stop_ref { get; set; }
        [DataMember]
-        public string irish_long_name { get; set; }
+       public string irish_long_name { get; set; }
        [DataMember]
-        public double latitude { get; set; }
+       public double latitude { get; set; }
        [DataMember]
-        public double longitude { get; set; }
+       public double longitude { get; set; }
 
     }
 

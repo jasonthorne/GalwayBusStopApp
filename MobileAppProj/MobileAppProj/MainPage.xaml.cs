@@ -34,6 +34,7 @@ namespace MobileAppProj
     {
 
         private BusStops[] busStopData;
+        private Routes routeData;
       
 
         public MainPage()
@@ -51,6 +52,7 @@ namespace MobileAppProj
 
             makeMap();
             await populateMap();
+            //makeRoutes();
 
         }
 
@@ -94,7 +96,8 @@ namespace MobileAppProj
 
                 //Ask user to change location settings.
                 bool result = await Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-location"));
-                break;
+                this.InitializeComponent();
+                    break;
             }
         }
 
@@ -202,22 +205,17 @@ namespace MobileAppProj
 
         private async void makeDepartureTimes(string stop_ref)
         {
-
-            //ProgressRing progRing = new ProgressRing();
-
-           //progRing.IsActive = true; //++++++++++++++++++++++++++++++++++++++++++++++++++++++NOT WORKING?? 
+           
             DepartureTimes departureTimeData = await GetDepartureTimes.API_Call(stop_ref);
-           //progRing.IsActive = false;
-
-            string message = string.Format("Route" + " | " + "Destination" +  " | " + "Time due" + "\n\n");
             DateTime nextBus;
             DateTime currentTime;
             TimeSpan timeUntillNextBus;
 
+            string message = string.Format("Route" + " | " + "Destination" + " | " + "Time due" + "\n\n");
             string hourValue = "";
             string minuteValue = "";
-            bool showMinutes = true;
-            bool showHours = true;
+            bool showMinutes; 
+            bool showHours; 
          
 
             //loop through list of departure times
@@ -228,9 +226,12 @@ namespace MobileAppProj
                 currentTime = DateTime.UtcNow;
                 timeUntillNextBus = nextBus.Subtract(currentTime);
 
+                //(re)set bools
                 showMinutes = true;
                 showHours = true;
 
+
+                //set minutes
                 if (timeUntillNextBus.Minutes > 1)
                 {
                        minuteValue = "minutes";
@@ -245,7 +246,7 @@ namespace MobileAppProj
                     showMinutes = false;
                 }
 
-
+                //set hours
                 if (timeUntillNextBus.Hours > 1)
                 {
                     hourValue = "hours";
@@ -263,7 +264,7 @@ namespace MobileAppProj
                 }
 
                
-
+                //append string 
                 if (showHours && showMinutes)
                 {
                     message += string.Format(departureTimeData.times[i].timetable_id + " | " + departureTimeData.times[i].display_name + " | " + timeUntillNextBus.Hours + " " + hourValue + " & " + timeUntillNextBus.Minutes + " " + minuteValue + " from now \n\n");
@@ -278,7 +279,7 @@ namespace MobileAppProj
                 }
                 else if (!showHours && !showMinutes)
                 {
-                    message += string.Format(departureTimeData.times[i].timetable_id + " | " + departureTimeData.times[i].display_name + " | " + "Due now\n\n");
+                    message += string.Format(departureTimeData.times[i].timetable_id + " | " + departureTimeData.times[i].display_name + " | " + "due now\n\n");
                 }
 
             }
@@ -288,11 +289,10 @@ namespace MobileAppProj
         }
 
 
-
+        //show message to user
         private async void showMessage(string message)
         {
             MessageDialog dialog = new MessageDialog(message);
-
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await dialog.ShowAsync());
         }
 
@@ -316,7 +316,15 @@ namespace MobileAppProj
             if ((string)RoutesListBox.SelectedItem == "test")
                 Debug.WriteLine((string)RoutesListBox.SelectedItem);
         }
-        
+
+    /*
+        private async void makeRoutes()
+        {
+
+            await null;
+        }
+        */
+
     }
 
 }

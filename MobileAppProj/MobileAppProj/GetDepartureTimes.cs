@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MobileAppProj
 {
-    class GetDepartureTimes
+    public class GetDepartureTimes
     {
         
         //make call to API to get departure times

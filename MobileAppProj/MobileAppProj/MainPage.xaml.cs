@@ -70,7 +70,6 @@ namespace MobileAppProj
             {
                 case GeolocationAccessStatus.Allowed:
 
-
                 // Get users current location
                 Geolocator geolocator = new Geolocator();
                 Geoposition pos = await geolocator.GetGeopositionAsync();
@@ -84,7 +83,6 @@ namespace MobileAppProj
                 userIcon.ZIndex = 0;
                 userIcon.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/userIcon.png"));
 
-
                 // Add the icon to the map
                 MyMap.MapElements.Add(userIcon);
 
@@ -95,9 +93,9 @@ namespace MobileAppProj
 
                 break;
 
-            case GeolocationAccessStatus.Denied:
+                case GeolocationAccessStatus.Denied:
 
-                //Ask user to change location settings.
+                //Ask user to change location settings, and exit program. 
                 bool result = await Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-location"));
                 Application.Current.Exit();
                 break;
@@ -106,7 +104,7 @@ namespace MobileAppProj
 
 
 
-        //private async void populateMap()
+        //populate map with bus stops
         private async Task<BusStops[]> populateMap()
         {
 
@@ -137,12 +135,6 @@ namespace MobileAppProj
                 tempMapIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
                 tempMapIcon.ZIndex = 0;
                 tempMapIcon.Title = busStopData[i].long_name;
-                //tempMapIcon.Title = busStopData[i].stop_ref;
-                /*
-                MapIconObj tempMapIconObj = new MapIconObj();
-                tempMapIconObj.mapIcon = tempMapIcon;
-                tempMapIconObj.stop_id = busStopData[i].stop_id;
-                */
 
                 //add icon to map
                 MyMap.MapElements.Add(tempMapIcon);
@@ -169,7 +161,7 @@ namespace MobileAppProj
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++DELETE!!
 
 
-
+        //listener for icon clicks
         private void mapIcon_Click(MapControl sender, MapElementClickEventArgs args)
         {
 
@@ -180,11 +172,9 @@ namespace MobileAppProj
             string long_name = clickedIcon.Title;
            
 
-
+            //if user hasnt clicked his location icon
             if (!long_name.Contains("You are here"))
             {
-
-               //string stop_ref = "";
 
                 //loop through busStopData
                 for (int i = 0; i < busStopData.Length; i++)
@@ -199,14 +189,14 @@ namespace MobileAppProj
                 }
 
            } 
-           else
+           else //user location was clicked
            {
                 showMessage(clickedIcon.Title);       
            }
 
         }
 
-
+        //find and format departure times
         private async void makeDepartureTimes(string stop_ref)
         {
             
@@ -315,9 +305,20 @@ namespace MobileAppProj
         private void RoutesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
-          
-            
+            //loop through routeStops list
+            for (int i = 0; i < routeStopsList.Count; i++)
+            {
 
+                //find selected route
+                if ((string)RoutesListBox.SelectedItem == routeStopsList[i].route.long_name)
+                {
+                    Debug.WriteLine(routeStopsList[i].route.long_name);
+                }
+
+            }
+
+
+            /*
             if ((string)RoutesListBox.SelectedItem == routeStopData.route.long_name)
             {
                 Debug.WriteLine((string)RoutesListBox.SelectedItem); //+++++++++++++++++++++++++++++++++++++++++++++++++
@@ -326,7 +327,7 @@ namespace MobileAppProj
                 makePolyLine();
 
             }
-
+            */
 
             if ((string)RoutesListBox.SelectedItem == "Delete route")
             {
@@ -360,6 +361,7 @@ namespace MobileAppProj
         }
 
 
+        //add route to listBox
         private async void addRoute(int timetable_id)
         {
             RouteStops tempRouteStopData = await GetRouteStops.API_Call(timetable_id.ToString());

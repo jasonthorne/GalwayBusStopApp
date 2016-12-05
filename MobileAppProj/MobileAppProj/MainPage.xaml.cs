@@ -323,19 +323,29 @@ namespace MobileAppProj
                 Debug.WriteLine((string)RoutesListBox.SelectedItem);
         }
 
-    
+
         private async void makeRoutes()
         {
 
             //await progressRing.IsActive = true;
-            //
-            Routes RouteData = await GetRoutes.API_Call();
+            ////////Routes routeData = await GetRoutes.API_Call(); ////NOT WORKING +++++++++++++++++++++++++++++++++++++++
             //progressRing.IsActive = false;
 
+            
+            //Debug.WriteLine(routeData.Route_401.long_name);
+            RouteStops routeStopData;
+
+            //loop through routeData should be here +++++++++++++++++++
+
+            routeStopData = await GetRouteStops.API_Call("401"); //passing in known timetable_id for now. 
+            //routeStopData[i] = await GetRouteStops.API_Call(routeData[i].route.timetable_id); //passing in known timetable_id for now. 
+
+            //end of loop++++++++++++
+            ///Debug.WriteLine("this should be 401:" + routeStopData.         //.route[1].timetable_id);
+           
+        
 
         }
-       
-
     }
 
 }

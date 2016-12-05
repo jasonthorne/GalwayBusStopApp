@@ -98,6 +98,7 @@
     <Compile Include="GetBusStops.cs" />
     <Compile Include="GetDepartureTimes.cs" />
     <Compile Include="GetRoutes.cs" />
+    <Compile Include="GetRouteStops.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

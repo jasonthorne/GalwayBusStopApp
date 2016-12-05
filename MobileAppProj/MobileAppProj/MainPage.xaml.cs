@@ -35,7 +35,9 @@ namespace MobileAppProj
 
         private BusStops[] busStopData;
         //private Routes routeData;
-       
+        private RouteStops routeStopData;
+
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -319,7 +321,8 @@ namespace MobileAppProj
             //brak out of loop
 
 
-            if ((string)RoutesListBox.SelectedItem == "test")
+            if ((string)RoutesListBox.SelectedItem == routeStopData.route.long_name)
+
                 Debug.WriteLine((string)RoutesListBox.SelectedItem);
         }
 
@@ -333,17 +336,26 @@ namespace MobileAppProj
 
             
             //Debug.WriteLine(routeData.Route_401.long_name);
-            RouteStops routeStopData;
+            //RouteStops routeStopData;
 
             //loop through routeData should be here +++++++++++++++++++
 
-            routeStopData = await GetRouteStops.API_Call("401"); //passing in known timetable_id for now. 
+
+
+            //routeStopData = await GetRouteStops.API_Call("401"); //passing in known timetable_id for now. 
             //routeStopData[i] = await GetRouteStops.API_Call(routeData[i].route.timetable_id); //passing in known timetable_id for now. 
 
             //end of loop++++++++++++
-            ///Debug.WriteLine("this should be 401:" + routeStopData.         //.route[1].timetable_id);
-           
-        
+
+
+            routeStopData = await GetRouteStops.API_Call("402");
+
+            RoutesListBox.Items.Add(routeStopData.route.long_name.ToString());
+
+
+            //Debug.WriteLine("this should be 401: " + routeStopData.route.timetable_id);       
+
+
 
         }
     }

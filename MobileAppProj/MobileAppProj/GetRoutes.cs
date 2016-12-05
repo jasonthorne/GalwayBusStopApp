@@ -36,10 +36,22 @@ namespace MobileAppProj
     }
 
 
-
+    
     //C# class from Json 
     [DataContract]
-    public class Route_401
+    public class _401
+    {
+        [DataMember]
+        public int timetable_id { get; set; }
+        [DataMember]
+        public string long_name { get; set; }
+        [DataMember]
+        public string short_name { get; set; }
+    }
+
+
+    [DataContract]
+    public class _402
     {
         [DataMember]
         public int timetable_id { get; set; }
@@ -50,7 +62,7 @@ namespace MobileAppProj
     }
 
     [DataContract]
-    public class Route_402
+    public class _403
     {
         [DataMember]
         public int timetable_id { get; set; }
@@ -61,7 +73,7 @@ namespace MobileAppProj
     }
 
     [DataContract]
-    public class Route_403
+    public class _404
     {
         [DataMember]
         public int timetable_id { get; set; }
@@ -72,7 +84,7 @@ namespace MobileAppProj
     }
 
     [DataContract]
-    public class Route_404
+    public class _405
     {
         [DataMember]
         public int timetable_id { get; set; }
@@ -83,7 +95,7 @@ namespace MobileAppProj
     }
 
     [DataContract]
-    public class Route_405
+    public class _407
     {
         [DataMember]
         public int timetable_id { get; set; }
@@ -94,7 +106,7 @@ namespace MobileAppProj
     }
 
     [DataContract]
-    public class Route_407
+    public class _409
     {
         [DataMember]
         public int timetable_id { get; set; }
@@ -105,7 +117,7 @@ namespace MobileAppProj
     }
 
     [DataContract]
-    public class Route_409
+    public class _410
     {
         [DataMember]
         public int timetable_id { get; set; }
@@ -115,36 +127,29 @@ namespace MobileAppProj
         public string short_name { get; set; }
     }
 
-    [DataContract]
-    public class Route_410
-    {
-        [DataMember]
-        public int timetable_id { get; set; }
-        [DataMember]
-        public string long_name { get; set; }
-        [DataMember]
-        public string short_name { get; set; }
-    }
-
+   
     [DataContract]
     public class Routes
     {
+       
         [DataMember]
-        public Route_401 Route_401 { get; set; }
+        public _401 _401 { get; set; }
         [DataMember]
-        public Route_402 Route_402 { get; set; }
+        public _402 _402 { get; set; }
         [DataMember]
-        public Route_403 Route_403 { get; set; }
+        public _403 _403 { get; set; }
         [DataMember]
-        public Route_404 Route_404 { get; set; }
+        public _404 _404 { get; set; }
         [DataMember]
-        public Route_405 Route_405 { get; set; }
+        public _405 _405 { get; set; }
         [DataMember]
-        public Route_407 Route_407 { get; set; }
+        public _407 _407 { get; set; }
         [DataMember]
-        public Route_409 Route_409 { get; set; }
+        public _409 _409 { get; set; }
         [DataMember]
-        public Route_410 Route_410 { get; set; }
+        public _410 _410 { get; set; }   
+          
     }
-
+      
 }
+

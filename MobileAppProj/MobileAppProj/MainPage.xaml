@@ -32,38 +32,34 @@
         <SplitView Grid.Row="1" Name="MySpiltView" DisplayMode="CompactOverlay" OpenPaneLength="300" CompactPaneLength="0" HorizontalAlignment="Left" Width="300">
             <SplitView.Pane>
                 <ListBox Name="RoutesListBox" SelectionMode="Single" SelectionChanged="RoutesListBox_SelectionChanged">
-                    <ListBoxItem>
-                        <!-- <StackPanel Orientation="Horizontal"> -->
+                    <!-- <ListBoxItem>
+                       <StackPanel Orientation="Horizontal"> 
                             <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="20" Text="&#xEB47;"/>
-                        <!-- <TextBlock Text="test" FontSize="20" /> -->
-                        <!--</StackPanel> -->
+                         <TextBlock Text="test" FontSize="20" /> 
+                       </StackPanel> 
                     </ListBoxItem>
 
 
                     <ListBoxItem>
-                        <!-- <StackPanel Orientation="Horizontal"> -->
+                         <StackPanel Orientation="Horizontal">
                             <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="20" Text="&#xEB47;"/>
-                        <!--  <TextBlock Text="test2" FontSize="20" />  -->
-                        <!-- </StackPanel>  -->
-                    </ListBoxItem>
+                         <TextBlock Text="test2" FontSize="20" /> 
+                         </StackPanel> 
+                    </ListBoxItem>-->
 
                 </ListBox>
             </SplitView.Pane>
-
-            
         </SplitView>
 
-        <!-- <ProgressRing Height="80" Width="80" /> -->
 
+        <!-- progress ring for when user is waiting -->
         <ProgressRing Name="progressRing" IsActive="False" Height="80" Width="80" Grid.RowSpan="2" />
 
         <!--
         <Button x:Name="test1" Content="testAPI1" Height="100" Width="100" Margin="135,136,0,404" Click="test1_Click" Visibility="Visible"/>
         <TextBox x:Name="textBoxTest1" Height="100" TextWrapping="Wrap" Text="testing API1" Margin="47,312,197,228"/>
         <TextBox x:Name="textBoxTest2" Height="100" TextWrapping="Wrap" Text="testing API2" Width="100" Margin="47,458,213,82" Visibility="Collapsed"/>
-        
-
-        <ProgressRing Height="80" Width="80"/>-->
+       -->
     </Grid>
 
 </Page>

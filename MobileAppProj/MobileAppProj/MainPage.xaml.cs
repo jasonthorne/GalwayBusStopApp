@@ -11,6 +11,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage.Streams;
 using Windows.System;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -34,17 +35,14 @@ namespace MobileAppProj
     {
 
         private BusStops[] busStopData;
-        //private Routes routeData;
         private RouteStops routeStopData;
-
+        private bool madeRoute = false;
+        List<RouteStops> routeStopsList = new List<RouteStops>();
+        
 
         public MainPage()
         {
             this.InitializeComponent();
-            
-  
-            RoutesListBox.Items.Add("test"); ////////////////Delete!!
-
         }
 
 
@@ -97,10 +95,11 @@ namespace MobileAppProj
 
                 break;
 
-            case GeolocationAccessStatus.Denied: //++++++++++++++++++++++++++++++THIS NEEDS HANDLED!! 
+            case GeolocationAccessStatus.Denied:
 
                 //Ask user to change location settings.
                 bool result = await Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-location"));
+                Application.Current.Exit();
                 break;
             }
         }
@@ -159,7 +158,7 @@ namespace MobileAppProj
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++DELETE!!
         private void test1_Click(object sender, RoutedEventArgs e)
         {
-            RoutesListBox.Items.Add("fff");
+            ///RoutesListBox.Items.Add("fff");
 
             //BusStops[] test = await GetBusStops.API_Call();
             // textBoxTest1.Text = test[0].stop_ref.ToString();
@@ -305,59 +304,75 @@ namespace MobileAppProj
         }
 
 
-        //open pane
+        //show routes to user
         private void ShowRoutesButton_Click(object sender, RoutedEventArgs e)
         {
             MySpiltView.IsPaneOpen = !MySpiltView.IsPaneOpen;
         }
 
+
         //list box event listener
         private void RoutesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
-            //spin through routes object, then check if title is equal to one pressed. 
-            //plot route 
-            //make cancel route button
-            //brak out of loop
-
+          
+            
 
             if ((string)RoutesListBox.SelectedItem == routeStopData.route.long_name)
+            {
+                Debug.WriteLine((string)RoutesListBox.SelectedItem); //+++++++++++++++++++++++++++++++++++++++++++++++++
+                RoutesListBox.Items.Add("Delete route");
 
-                Debug.WriteLine((string)RoutesListBox.SelectedItem);
+                makePolyLine();
+
+            }
+
+
+            if ((string)RoutesListBox.SelectedItem == "Delete route")
+            {
+                //remove polyline
+            }
+
         }
 
 
-        private async void makeRoutes()
+        //private async void makeRoutes()
+        private void makeRoutes()
         {
 
-            //await progressRing.IsActive = true;
-            ////////Routes routeData = await GetRoutes.API_Call(); ////NOT WORKING +++++++++++++++++++++++++++++++++++++++
-            //progressRing.IsActive = false;
-
-            
-            //Debug.WriteLine(routeData.Route_401.long_name);
-            //RouteStops routeStopData;
-
-            //loop through routeData should be here +++++++++++++++++++
+            progressRing.IsActive = true;
+            ///Routes routeData = await GetRoutes.API_Call(); ////NOT WORKING 
+            progressRing.IsActive = false;
 
 
+            /*This is a work around to the above API call not working.
+             * Initial plan was to loop through routeData to extract timetable_ids, making routeStopData call at each ith position,
+             * then add received long_name to listBox.*/
 
-            //routeStopData = await GetRouteStops.API_Call("401"); //passing in known timetable_id for now. 
-            //routeStopData[i] = await GetRouteStops.API_Call(routeData[i].route.timetable_id); //passing in known timetable_id for now. 
-
-            //end of loop++++++++++++
-
-
-            routeStopData = await GetRouteStops.API_Call("402");
-
-            RoutesListBox.Items.Add(routeStopData.route.long_name.ToString());
-
-
-            //Debug.WriteLine("this should be 401: " + routeStopData.route.timetable_id);       
-
-
-
+            addRoute(401);
+            addRoute(402);
+            addRoute(403);
+            addRoute(404);
+            addRoute(405);
+            addRoute(407);
+            addRoute(409);
+              
         }
+
+
+        private async void addRoute(int timetable_id)
+        {
+            RouteStops tempRouteStopData = await GetRouteStops.API_Call(timetable_id.ToString());
+            RoutesListBox.Items.Add(tempRouteStopData.route.long_name);
+            routeStopsList.Add(tempRouteStopData);
+        }
+
+
+        private  void makePolyLine()
+        {
+           
+        }
+
     }
 
 }

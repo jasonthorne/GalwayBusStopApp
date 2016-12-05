@@ -66,6 +66,16 @@ namespace MobileAppProj
         public double longitude { get; set; }
     }
 
+    /*
+    [DataContract]
+    public class StopsWrapper
+    {
+        [DataMember]
+        public List<Stops> stopsWrapper { get; set; }
+    }
+    */
+    
+
     [DataContract]
     public class RouteStops
     {
@@ -73,7 +83,9 @@ namespace MobileAppProj
         public Route route { get; set; }
         [DataMember]
         public List<List<Stops>> stops { get; set; } //Close!! This splits the lis into two lists!
-        //public List<Stops> stops { get; set; } //Close!! THis splits the lis into two lists!
+        
+
+        //public List<List<Stops>> stopsWrapper { get; set; }
     }
 
 

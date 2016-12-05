@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace MobileAppProj
 {
+
+    //adapted from: https://www.youtube.com/watch?v=rFyc9PSpPug&index=72&list=PLi2hbezQRVS0cPMeW3uDlUHnO_rPvJCV9
+
     public class GetRouteStops
     {
         //make call to API to get list of route stops
@@ -66,26 +69,15 @@ namespace MobileAppProj
         public double longitude { get; set; }
     }
 
-    /*
-    [DataContract]
-    public class StopsWrapper
-    {
-        [DataMember]
-        public List<Stops> stopsWrapper { get; set; }
-    }
-    */
-    
-
+ 
     [DataContract]
     public class RouteStops
     {
         [DataMember]
         public Route route { get; set; }
         [DataMember]
-        public List<List<Stops>> stops { get; set; } //Close!! This splits the list into two lists!
-        
-
-        //public List<List<Stops>> stopsWrapper { get; set; }
+        public List<List<Stops>> stops { get; set; } 
+       
     }
 
 

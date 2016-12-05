@@ -35,10 +35,10 @@ namespace MobileAppProj
     {
 
         private BusStops[] busStopData;
-        private RouteStops routeStopData;
         private bool madeRoute = false;
         List<RouteStops> routeStopsList = new List<RouteStops>();
-        
+        private MapPolyline polyline;
+
 
         public MainPage()
         {
@@ -49,17 +49,18 @@ namespace MobileAppProj
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
 
-            makeMap();
+            makeMap(); //make map at users location
 
             progressRing.IsActive = true;
-            await populateMap();
+            await populateMap(); //populate map with stops
             progressRing.IsActive = false;
 
-            makeRoutes();
+            makeRoutes(); //make bus routes
 
         }
 
 
+        //make map at users location
         private async void makeMap()
         {
 
@@ -68,7 +69,7 @@ namespace MobileAppProj
             var accessStatus = await Geolocator.RequestAccessAsync();
             switch (accessStatus)
             {
-                case GeolocationAccessStatus.Allowed:
+                case GeolocationAccessStatus.Allowed: //if location settings are on
 
                 // Get users current location
                 Geolocator geolocator = new Geolocator();
@@ -88,12 +89,12 @@ namespace MobileAppProj
 
                 // Set the map's location
                 MyMap.Center = myLocation;
-                MyMap.ZoomLevel = 16; //14
+                MyMap.ZoomLevel = 16; 
                 MyMap.LandmarksVisible = true;
 
                 break;
 
-                case GeolocationAccessStatus.Denied:
+                case GeolocationAccessStatus.Denied: //if location setting are off
 
                 //Ask user to change location settings, and exit program. 
                 bool result = await Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-location"));
@@ -147,40 +148,25 @@ namespace MobileAppProj
 
 
 
-        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++DELETE!!
-        private void test1_Click(object sender, RoutedEventArgs e)
-        {
-            ///RoutesListBox.Items.Add("fff");
-
-            //BusStops[] test = await GetBusStops.API_Call();
-            // textBoxTest1.Text = test[0].stop_ref.ToString();
-
-            //var data = GetBusStops.GetBusStopData();
-            //textBoxTest1.Text = data.ToString();
-        }
-        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++DELETE!!
-
-
         //listener for icon clicks
         private void mapIcon_Click(MapControl sender, MapElementClickEventArgs args)
         {
 
             //find which icon element has been clicked 
             MapIcon clickedIcon = args.MapElements.FirstOrDefault(x => x is MapIcon) as MapIcon;
-            Debug.WriteLine("Icon clicked with Long Name: " + clickedIcon.Title); //test ================================REMOVE!! 
 
             string long_name = clickedIcon.Title;
            
 
             //if user hasnt clicked his location icon
-            if (!long_name.Contains("You are here"))
+            if (!clickedIcon.Title.Contains("You are here"))
             {
 
                 //loop through busStopData
                 for (int i = 0; i < busStopData.Length; i++)
                 {
                     //find stop_ref
-                    if (long_name == busStopData[i].long_name)
+                    if (clickedIcon.Title == busStopData[i].long_name)
                     {
                         //stop_ref = busStopData[i].stop_ref;
                         makeDepartureTimes(busStopData[i].stop_ref);
@@ -199,11 +185,11 @@ namespace MobileAppProj
         //find and format departure times
         private async void makeDepartureTimes(string stop_ref)
         {
-            
+            //get departure times
             progressRing.IsActive = true; 
             DepartureTimes departureTimeData = await GetDepartureTimes.API_Call(stop_ref); 
             progressRing.IsActive = false; 
-
+           
             DateTime nextBus;
             DateTime currentTime;
             TimeSpan timeUntillNextBus;
@@ -305,43 +291,39 @@ namespace MobileAppProj
         private void RoutesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
-            RouteStops foundRoute = new RouteStops();
-
-            //loop through routeStops list
-            for (int i = 0; i < routeStopsList.Count; i++)
+            //if no route has been made
+            if (!madeRoute)
             {
+                RouteStops foundRoute = new RouteStops();
 
-                //find selected route
-                if ((string)RoutesListBox.SelectedItem == routeStopsList[i].route.long_name)
+                //loop through routeStops list
+                for (int i = 0; i < routeStopsList.Count; i++)
                 {
-                    Debug.WriteLine(routeStopsList[i].route.long_name); //////////////////////////REMOVE 
-                    /////RoutesListBox.Items.Add("Delete route"); //add a delete route button
-                    foundRoute = routeStopsList[i];
-                    break;
+
+                    //find selected route
+                    if ((string)RoutesListBox.SelectedItem == routeStopsList[i].route.long_name)
+                    {
+                        madeRoute = true;
+                        foundRoute = routeStopsList[i];
+                        //pass route stops into makePolyLine
+                        makePolyLine(foundRoute);
+                        break;
+                    }
+
                 }
 
             }
-
-
-            //pass route stops into makePolyLine
-            makePolyLine(foundRoute);
-
-
-            /*
-            if ((string)RoutesListBox.SelectedItem == routeStopData.route.long_name)
+            else
             {
-                Debug.WriteLine((string)RoutesListBox.SelectedItem); //+++++++++++++++++++++++++++++++++++++++++++++++++
-                RoutesListBox.Items.Add("Delete route");
+                if ((string)RoutesListBox.SelectedItem == "Delete Route")
+                {
+                    //remove polyline
+                    MyMap.MapElements.Remove(polyline);
+                    madeRoute = false;
 
-                makePolyLine();
-
+                }
             }
-            */
 
-            if ((string)RoutesListBox.SelectedItem == "Delete route")
-            {
-                //remove polyline
-            }
 
         }
 
@@ -366,11 +348,12 @@ namespace MobileAppProj
             addRoute(405);
             addRoute(407);
             addRoute(409);
-              
+            RoutesListBox.Items.Add("Delete Route"); //add a delete route button
+
         }
 
 
-        //add route to listBox
+        //add route to listBox and routeStopsList
         private async void addRoute(int timetable_id)
         {
             RouteStops tempRouteStopData = await GetRouteStops.API_Call(timetable_id.ToString());
@@ -379,15 +362,44 @@ namespace MobileAppProj
         }
 
 
+        //make polyline.  Adapted from: https://blogs.windows.com/buildingapps/2016/04/18/map-apis-and-controls-adding-external-elements/#2E3O6xjTJS6xIQHT.97
         private void makePolyLine(RouteStops routeStops)
         {
-
             
-            for (int i = 0; i < routeStops.stops.Count; i++)
-            {
-               // Debug.Write();
-            }
+            List<List<Stops>> allStops = routeStops.stops;
 
+            //loop through allStops
+            for (int i = 0; i < allStops.Count; i++)
+            {
+                
+                List<Stops> theStops = allStops.ElementAt(i);
+
+                polyline = new MapPolyline();
+
+                //define line
+                polyline.StrokeColor = Colors.OrangeRed;
+                polyline.StrokeThickness = 2;
+                polyline.StrokeDashed = true;
+
+                //create path
+                List<BasicGeoposition> geoPositions = new List<BasicGeoposition>();
+
+                //loop through theStops
+                for (int j = 0; j < theStops.Count(); j++)
+                {
+                    //find a stop
+                    Stops aStop = theStops.ElementAt(j);
+
+                    //add geoPositions to path
+                    geoPositions.Add(new BasicGeoposition() { Latitude = aStop.latitude, Longitude = aStop.longitude });
+                }
+
+
+                polyline.Path = new Geopath(geoPositions);
+
+                //add polyline to map
+                MyMap.MapElements.Add(polyline);
+            }
         }
 
     }

@@ -305,6 +305,8 @@ namespace MobileAppProj
         private void RoutesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+            RouteStops foundRoute = new RouteStops();
+
             //loop through routeStops list
             for (int i = 0; i < routeStopsList.Count; i++)
             {
@@ -312,10 +314,17 @@ namespace MobileAppProj
                 //find selected route
                 if ((string)RoutesListBox.SelectedItem == routeStopsList[i].route.long_name)
                 {
-                    Debug.WriteLine(routeStopsList[i].route.long_name);
+                    Debug.WriteLine(routeStopsList[i].route.long_name); //////////////////////////REMOVE 
+                    /////RoutesListBox.Items.Add("Delete route"); //add a delete route button
+                    foundRoute = routeStopsList[i];
+                    break;
                 }
 
             }
+
+
+            //pass route stops into makePolyLine
+            makePolyLine(foundRoute);
 
 
             /*
@@ -370,9 +379,15 @@ namespace MobileAppProj
         }
 
 
-        private  void makePolyLine()
+        private void makePolyLine(RouteStops routeStops)
         {
-           
+
+            
+            for (int i = 0; i < routeStops.stops.Count; i++)
+            {
+               // Debug.Write();
+            }
+
         }
 
     }

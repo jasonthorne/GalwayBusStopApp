@@ -82,7 +82,7 @@ namespace MobileAppProj
         [DataMember]
         public Route route { get; set; }
         [DataMember]
-        public List<List<Stops>> stops { get; set; } //Close!! This splits the lis into two lists!
+        public List<List<Stops>> stops { get; set; } //Close!! This splits the list into two lists!
         
 
         //public List<List<Stops>> stopsWrapper { get; set; }

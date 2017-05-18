@@ -1,6 +1,6 @@
-#Mobile Applications Project.#
+# Mobile Applications Project. #
 
-###Jason Thorne. G00317349.###
+### Jason Thorne. G00317349. ###
 
 This is an app designed for giving realtime information on all Bus Éireann bus routes within Galway. It uses Bing Maps to display to the user's location upon opening, along with the locations of every bus stop within the city. 
 

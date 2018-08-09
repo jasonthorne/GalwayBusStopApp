@@ -1,4 +1,4 @@
-# Galway Bus Stops App#
+# Galway Bus Stops App #
 
 A C#, UWP app, giving realtime information on all Bus Éireann bus routes within Galway. 
 

@@ -1,6 +1,6 @@
 # Galway Bus Stops App #
 
-A C#, UWP app, giving realtime information on all Bus Éireann bus routes within Galway. 
+A C#, Universal Windows Platform app. Giving realtime information on all Bus Éireann bus routes within Galway. 
 
 It uses Bing Maps to display to the user's location upon opening, along with the locations of every bus stop within the city. The user's location marker is periodically updated to allow user to direct themselves around their location using the map. 
 
